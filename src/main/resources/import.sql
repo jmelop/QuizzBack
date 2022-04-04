@@ -1,0 +1,1 @@
+INSERT INTO cards (id, spanish, translation, group, set, language, create_at) VALUES(1, 'casa', 'house', 1, 'General vocabulary', 'English', '2022-04-04');
