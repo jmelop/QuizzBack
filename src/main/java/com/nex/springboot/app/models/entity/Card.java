@@ -8,27 +8,52 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="cards")
+@Table(name = "cards")
 public class Card implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty
+	@Size(min=2, max=14)
+	@Column(nullable=false)
 	private String spanish;
+	
+	@NotEmpty
+	@Size(min=2, max=14)
+	@Column(nullable=false)
 	private String translation;
+	
+	@NotEmpty
 	private int group;
-	private int set;
+	
+	@NotEmpty
+	@Size(min=2, max=16)
+	@Column(nullable=false)
+	private String set;
+	
+	@NotEmpty
+	@Size(min=2, max=8)
+	@Column(nullable=false)
 	private String language;
 	
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+	
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 
 	public Long getId() {
 		return id;
@@ -62,11 +87,11 @@ public class Card implements Serializable{
 		this.group = group;
 	}
 
-	public int getSet() {
+	public String getSet() {
 		return set;
 	}
 
-	public void setSet(int set) {
+	public void setSet(String set) {
 		this.set = set;
 	}
 
