@@ -27,4 +27,15 @@ public class ClientServiceImpl implements ICardService{
 		return cardDao.findById(id).orElse(null);
 	}
 
+	@Override
+	@Transactional
+	public Card save(Card card) {
+		return cardDao.save(card);
+	}
+
+	@Override
+	public void delete(Long id) {
+		cardDao.deleteById(id);
+	}
+
 }

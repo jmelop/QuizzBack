@@ -3,15 +3,24 @@ package com.nex.springboot.backend.quizz.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nex.springboot.backend.quizz.models.entity.Card;
@@ -47,4 +56,70 @@ public class CardRestController {
 		return new ResponseEntity<Card>(card, HttpStatus.OK);
 	}
 
+	@PostMapping("/cards")
+	public ResponseEntity<?> create(@Valid @RequestBody Card card, BindingResult result) {
+		Card newCard = null;
+		Map<String, Object> response = new HashMap<>();
+		if (result.hasErrors()) {
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> "Field '" + err.getField() + "' " + err.getDefaultMessage())
+					.collect(Collectors.toList());
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		try {
+			newCard = cardService.save(card);
+		} catch (DataAccessException e) {
+			response.put("message", "Error insert new card");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("message", "New card created");
+		response.put("card", newCard);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/cards/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> update(@Valid @RequestBody Card card, BindingResult result, @PathVariable Long id) {
+		Card fetchedCard = cardService.findById(id);
+		Card cardUpdated = null;
+		Map<String, Object> response = new HashMap<>();
+		if (result.hasErrors()) {
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> "Field '" + err.getField() + "' " + err.getDefaultMessage())
+					.collect(Collectors.toList());
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		if (fetchedCard == null) {
+			response.put("message", "Client ID: ".concat(id.toString().concat(" does not exist in DB")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		try {
+			cardUpdated.setGroup(fetchedCard.getGroup());
+			cardUpdated.setSet(fetchedCard.getSet());
+			cardUpdated.setSpanish(fetchedCard.getSpanish());
+			cardUpdated.setTranslation(fetchedCard.getTranslation());
+			cardService.save(cardUpdated);
+		} catch (DataAccessException e) {
+			response.put("message", "Error updating card");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("message", "Updated client!");
+		response.put("card", "cardUpdated");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping("/cards/{id}")
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			cardService.delete(id);
+		} catch (DataAccessException e) {
+			response.put("message", "Error deleting card!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("message", "Deleted card");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
 }
