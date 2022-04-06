@@ -1,4 +1,4 @@
-package com.nex.springboot.app.models.entity;
+package com.nex.springboot.backend.quizz.models.entity;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.nex.springboot.app;
+package com.nex.springboot.backend.quizz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
