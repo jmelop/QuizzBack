@@ -33,7 +33,6 @@ public class Card implements Serializable{
 	@Column(nullable=false)
 	private String translation;
 	
-	@NotEmpty
 	private int group;
 	
 	@NotEmpty
