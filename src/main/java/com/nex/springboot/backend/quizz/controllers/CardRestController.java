@@ -96,17 +96,18 @@ public class CardRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
-			cardUpdated.setGroup(fetchedCard.getGroup());
-			cardUpdated.setSet(fetchedCard.getSet());
-			cardUpdated.setSpanish(fetchedCard.getSpanish());
-			cardUpdated.setTranslation(fetchedCard.getTranslation());
+			cardUpdated = fetchedCard;
+			cardUpdated.setGroup(card.getGroup());
+			cardUpdated.setSet(card.getSet());
+			cardUpdated.setSpanish(card.getSpanish());
+			cardUpdated.setTranslation(card.getTranslation());
 			cardService.save(cardUpdated);
 		} catch (DataAccessException e) {
 			response.put("message", "Error updating card");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("message", "Updated client!");
-		response.put("card", "cardUpdated");
+		response.put("message", "Updated card!");
+		response.put("card", cardUpdated);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
