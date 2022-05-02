@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -40,10 +42,9 @@ public class Card implements Serializable{
 	@Column(nullable=false)
 	private String set;
 	
-	@NotEmpty
-	@Size(min=2, max=8)
-	@Column(nullable=false)
-	private String language;
+	@ManyToOne(optional = false)
+	@JoinColumn(name="language_id")
+	private Language language;
 	
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
@@ -52,6 +53,10 @@ public class Card implements Serializable{
 	@PrePersist
 	public void prePersist() {
 		createAt = new Date();
+	}
+	
+	public Card() {
+		
 	}
 
 	public Long getId() {
@@ -94,11 +99,11 @@ public class Card implements Serializable{
 		this.set = set;
 	}
 
-	public String getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
-	public void setLanguage(String language) {
+	public void setLanguage(Language language) {
 		this.language = language;
 	}
 

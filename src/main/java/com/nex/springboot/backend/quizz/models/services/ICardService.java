@@ -13,5 +13,5 @@ public interface ICardService {
 	public Card save(Card card);
 	
 	public void delete(Long id);
-
+	
 }

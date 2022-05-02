@@ -10,7 +10,7 @@ import com.nex.springboot.backend.quizz.models.dao.ICardDao;
 import com.nex.springboot.backend.quizz.models.entity.Card;
 
 @Service
-public class ClientServiceImpl implements ICardService{
+public class CardServiceImpl implements ICardService{
 	
 	@Autowired
 	private ICardDao cardDao;
