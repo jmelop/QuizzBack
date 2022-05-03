@@ -101,6 +101,7 @@ public class CardRestController {
 			cardUpdated.setSet(card.getSet());
 			cardUpdated.setSpanish(card.getSpanish());
 			cardUpdated.setTranslation(card.getTranslation());
+			cardUpdated.setLanguage(card.getLanguage());
 			cardService.save(cardUpdated);
 		} catch (DataAccessException e) {
 			response.put("message", "Error updating card");
