@@ -12,19 +12,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "languages")
-public class Language implements Serializable {
-	
+@Table(name = "categories")
+public class Category implements Serializable {
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotEmpty
-	@Size(min=2, max=12)
+	@Size(min = 2, max = 16)
 	@Column(nullable = false)
 	private String name;
 
-	public Language() {}
+	public Category() {}
 
 	public Long getId() {
 		return id;

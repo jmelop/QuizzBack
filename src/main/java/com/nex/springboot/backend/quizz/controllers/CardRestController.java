@@ -98,7 +98,7 @@ public class CardRestController {
 		try {
 			cardUpdated = fetchedCard;
 			cardUpdated.setGroup(card.getGroup());
-			cardUpdated.setSet(card.getSet());
+			cardUpdated.setCategory(card.getCategory());
 			cardUpdated.setSpanish(card.getSpanish());
 			cardUpdated.setTranslation(card.getTranslation());
 			cardUpdated.setLanguage(card.getLanguage());

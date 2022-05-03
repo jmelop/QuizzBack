@@ -37,10 +37,9 @@ public class Card implements Serializable{
 	
 	private int group;
 	
-	@NotEmpty
-	@Size(min=2, max=16)
-	@Column(nullable=false)
-	private String set;
+	@ManyToOne(optional = false)
+	@JoinColumn(name="category_id")
+	private Category category;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name="language_id")
@@ -55,9 +54,7 @@ public class Card implements Serializable{
 		createAt = new Date();
 	}
 	
-	public Card() {
-		
-	}
+	public Card() {}
 
 	public Long getId() {
 		return id;
@@ -91,12 +88,12 @@ public class Card implements Serializable{
 		this.group = group;
 	}
 
-	public String getSet() {
-		return set;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setSet(String set) {
-		this.set = set;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public Language getLanguage() {
