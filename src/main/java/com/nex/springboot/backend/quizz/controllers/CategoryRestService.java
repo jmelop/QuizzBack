@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,23 @@ public class CategoryRestService {
 	@GetMapping("/categories")
 	public List<Category> index() {
 		return categoryService.findAll();
+	}
+
+	@GetMapping("/categories/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		Category category = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			category = categoryService.findById(id);
+		} catch (DataAccessException e) {
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (category == null) {
+			response.put("message", "Category ID:".concat(id.toString().concat(" does not exist in DB")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
 	@PostMapping("/categories")

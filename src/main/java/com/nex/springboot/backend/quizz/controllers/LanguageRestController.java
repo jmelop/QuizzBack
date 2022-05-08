@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,20 +27,37 @@ import com.nex.springboot.backend.quizz.models.services.ILanguageService;
 @RestController
 @RequestMapping("/api")
 public class LanguageRestController {
-	
+
 	@Autowired
 	private ILanguageService languageService;
-	
+
 	@GetMapping("/languages")
 	public List<Language> index() {
 		return languageService.findAll();
 	}
-	
+
+	@GetMapping("/languages/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		Language language = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			language = languageService.findById(id);
+		} catch (DataAccessException e) {
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (language == null) {
+			response.put("message", "Language ID:".concat(id.toString().concat(" does not exist in DB")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Language>(language, HttpStatus.OK);
+	}
+
 	@PostMapping("/languages")
 	public ResponseEntity<?> create(@Valid @RequestBody Language language, BindingResult result) {
 		Language newLanguage = null;
 		Map<String, Object> response = new HashMap<>();
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			List<String> errors = result.getFieldErrors().stream()
 					.map(err -> "Field '" + err.getField() + "' " + err.getDefaultMessage())
 					.collect(Collectors.toList());
