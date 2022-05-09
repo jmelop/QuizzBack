@@ -38,6 +38,11 @@ public class CardRestController {
 	public List<Card> index() {
 		return cardService.findAll();
 	}
+	
+	@GetMapping("/cards/cat/{id}")
+	public List<Card> findAllByCategoryId(@PathVariable Long id) {
+		return cardService.findAllByCategoryId(id);
+	}
 
 	@GetMapping("/cards/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {

@@ -20,6 +20,12 @@ public class CardServiceImpl implements ICardService{
 	public List<Card> findAll() {
 		return (List<Card>) cardDao.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<Card> findAllByCategoryId(Long id) {
+		return cardDao.findAllByCategoryId(id);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
