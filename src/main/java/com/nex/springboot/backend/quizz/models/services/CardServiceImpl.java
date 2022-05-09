@@ -3,6 +3,8 @@ package com.nex.springboot.backend.quizz.models.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,6 @@ public class CardServiceImpl implements ICardService{
 	public List<Card> findAll() {
 		return (List<Card>) cardDao.findAll();
 	}
-	
-	@Override
-	@Transactional(readOnly=true)
-	public List<Card> findAllByCategoryId(Long id) {
-		return cardDao.findAllByCategoryId(id);
-	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -42,6 +38,18 @@ public class CardServiceImpl implements ICardService{
 	@Override
 	public void delete(Long id) {
 		cardDao.deleteById(id);
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public List<Card> findAllByCategoryId(Long id) {
+		return cardDao.findAllByCategoryId(id);
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Page<Card> findAll(Pageable pageable) {
+		return cardDao.findAll(pageable);
 	}
 
 }
