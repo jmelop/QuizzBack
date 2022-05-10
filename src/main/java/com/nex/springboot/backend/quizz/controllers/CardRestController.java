@@ -66,7 +66,7 @@ public class CardRestController {
 		return new ResponseEntity<Card>(card, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = { "/cardss", "/" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/cards/pagination", "/" }, method = RequestMethod.GET)
 	public ResponseEntity<?> list(@RequestParam(name = "page", defaultValue = "0") int page) {
 		Map<String, Object> response = new HashMap<>();
 		Pageable pageRequest = PageRequest.of(page, 4);
@@ -123,6 +123,7 @@ public class CardRestController {
 			cardUpdated.setSpanish(card.getSpanish());
 			cardUpdated.setTranslation(card.getTranslation());
 			cardUpdated.setLanguage(card.getLanguage());
+			cardUpdated.setFavorite(card.getFavorite());
 			cardService.save(cardUpdated);
 		} catch (DataAccessException e) {
 			response.put("message", "Error updating card");
